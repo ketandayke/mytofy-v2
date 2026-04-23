@@ -42,7 +42,7 @@ export default function Auth() {
       
       if (data.success) {
           toast.success(data.message);
-          login(data.data.user);
+          login(data.data.user, data.data.accessToken);
           navigate(from, { replace: true });
       }
     } catch (error) {

@@ -6,6 +6,8 @@ export const useSocket = (roomId) => {
     if (!roomId) return;
     
     // Connect and join room
+    const token = localStorage.getItem('mytofy_token');
+    socket.auth = { token };
     socket.connect();
     socket.emit('join_room', { roomId });
 

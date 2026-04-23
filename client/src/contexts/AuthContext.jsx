@@ -16,33 +16,48 @@ export const AuthProvider = ({ children }) => {
     }
     setLoading(false);
 
+    // Add a global request interceptor to inject the token if it exists
+    const reqInterceptor = axios.interceptors.request.use((config) => {
+      const token = localStorage.getItem('mytofy_token');
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+      return config;
+    });
+
     // Add a global interceptor to handle 401 Unauthorized errors
-    const interceptor = axios.interceptors.response.use(
+    const resInterceptor = axios.interceptors.response.use(
       (response) => response,
       (error) => {
         if (error.response && error.response.status === 401) {
-          // If we get a 401 from the server, our cookie is invalid/missing.
+          // If we get a 401 from the server, our cookie/token is invalid/missing.
           // Clear local state to force the user back to the login screen.
           setUser(null);
           localStorage.removeItem('mytofy_user');
+          localStorage.removeItem('mytofy_token');
         }
         return Promise.reject(error);
       }
     );
 
     return () => {
-      axios.interceptors.response.eject(interceptor);
+      axios.interceptors.request.eject(reqInterceptor);
+      axios.interceptors.response.eject(resInterceptor);
     };
   }, []);
 
-  const login = (userData) => {
+  const login = (userData, token) => {
     setUser(userData);
     localStorage.setItem('mytofy_user', JSON.stringify(userData));
+    if (token) {
+      localStorage.setItem('mytofy_token', token);
+    }
   };
 
   const logout = async () => {
     setUser(null);
     localStorage.removeItem('mytofy_user');
+    localStorage.removeItem('mytofy_token');
     try {
         await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/auth/logout`, {}, { withCredentials: true });
     } catch (error) {

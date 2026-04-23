@@ -1,13 +1,19 @@
-import { addSongToQueue, addUserToRoom, getQueue, getRoomState, popNextSong, removeUserFromRoom, updateRoomPlayback } from "../services/redis.service.js";
+import { addSongToQueue, addUserToRoom, getQueue, getRoomState, popNextSong, removeUserFromRoom, updateRoomPlayback, initRoomState } from "../services/redis.service.js";
 import logger from "../config/logger.js";
 import { Room } from "../models/room.model.js";
 import { ChatMessage } from "../models/chatMessage.model.js";
 
 export const registerRoomHandlers = (io, socket) => {
     
-    // Middleware-like function to check if user is host
     const isHost = async (roomId, userId) => {
-        const state = await getRoomState(roomId);
+        let state = await getRoomState(roomId);
+        if (!state) {
+            const room = await Room.findById(roomId);
+            if (room) {
+                await initRoomState(roomId, room.hostId.toString());
+                state = await getRoomState(roomId);
+            }
+        }
         return state && state.hostId === userId.toString();
     };
 
@@ -47,10 +53,19 @@ export const registerRoomHandlers = (io, socket) => {
 
     socket.on("add_to_queue", async ({ roomId, songId, title, thumbnail }) => {
         try {
-            const state = await getRoomState(roomId);
+            let state = await getRoomState(roomId);
+            
+            // Recover state if Redis lost it
+            if (!state) {
+                const room = await Room.findById(roomId);
+                if (room) {
+                    await initRoomState(roomId, room.hostId.toString());
+                    state = await getRoomState(roomId);
+                }
+            }
             
             // Auto-play if nothing is currently playing
-            if (!state.currentSongId || state.currentSongId === "") {
+            if (!state || !state.currentSongId || state.currentSongId === "") {
                 const startedAt = Date.now();
                 await updateRoomPlayback(roomId, "playing", startedAt, songId);
                 io.to(roomId).emit("sync_play", { songId, startedAt });
