@@ -1,8 +1,16 @@
 import { createClient } from "redis";
 import logger from "./logger.js";
 
+const redisUrl = process.env.REDIS_URL || "redis://localhost:6379";
+// Ensure it uses secure connection for upstash even if they accidentally provided 'redis://'
+const parsedUrl = redisUrl.includes("upstash.io") ? redisUrl.replace("redis://", "rediss://") : redisUrl;
+
 const redisClient = createClient({
-  url: process.env.REDIS_URL || "redis://localhost:6379",
+  url: parsedUrl,
+  socket: {
+    tls: parsedUrl.startsWith("rediss://"),
+    rejectUnauthorized: false, // Prevents sudden drops due to strict SSL checks
+  }
 });
 
 redisClient.on("error", (err) => logger.error("Redis Client Error", err));

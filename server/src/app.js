@@ -11,6 +11,7 @@ import roomRouter from "./routes/room.routes.js";
 import cookieParser from "cookie-parser";
 
 const app = express();
+app.set("trust proxy", 1);
 
 const morganFormat = ":method :url :status :res[content-length] - :response-time ms";
 

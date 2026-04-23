@@ -1191,3 +1191,11 @@
 {"level":"info","message":"Redis connected successfully","service":"mytofy-backend","timestamp":"2026-04-23 22:23:38"}
 {"level":"info","message":"⚙️ Server is running at port : 8000","service":"mytofy-backend","timestamp":"2026-04-23 22:23:38"}
 {"level":"info","message":"Log cleanup cron job scheduled.","service":"mytofy-backend","timestamp":"2026-04-23 22:23:38"}
+{"level":"info","message":"⚙️ Server is running at port : 8000","service":"mytofy-backend","timestamp":"2026-04-23 22:23:50"}
+{"level":"info","message":"Log cleanup cron job scheduled.","service":"mytofy-backend","timestamp":"2026-04-23 22:23:50"}
+{"level":"info","message":"\nMongoDB connected !! DB HOST: cluster0-shard-00-01.zkbv0.mongodb.net","service":"mytofy-backend","timestamp":"2026-04-23 22:23:55"}
+{"level":"info","message":"Redis connected successfully","service":"mytofy-backend","timestamp":"2026-04-23 22:23:55"}
+{"level":"info","message":"⚙️ Server is running at port : 8000","service":"mytofy-backend","timestamp":"2026-04-23 22:35:53"}
+{"level":"info","message":"Log cleanup cron job scheduled.","service":"mytofy-backend","timestamp":"2026-04-23 22:35:54"}
+{"level":"info","message":"\nMongoDB connected !! DB HOST: cluster0-shard-00-01.zkbv0.mongodb.net","service":"mytofy-backend","timestamp":"2026-04-23 22:35:57"}
+{"level":"info","message":"Redis connected successfully","service":"mytofy-backend","timestamp":"2026-04-23 22:35:57"}
