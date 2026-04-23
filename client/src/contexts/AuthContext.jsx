@@ -15,6 +15,24 @@ export const AuthProvider = ({ children }) => {
       setUser(JSON.parse(storedUser));
     }
     setLoading(false);
+
+    // Add a global interceptor to handle 401 Unauthorized errors
+    const interceptor = axios.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        if (error.response && error.response.status === 401) {
+          // If we get a 401 from the server, our cookie is invalid/missing.
+          // Clear local state to force the user back to the login screen.
+          setUser(null);
+          localStorage.removeItem('mytofy_user');
+        }
+        return Promise.reject(error);
+      }
+    );
+
+    return () => {
+      axios.interceptors.response.eject(interceptor);
+    };
   }, []);
 
   const login = (userData) => {
