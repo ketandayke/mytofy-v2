@@ -5,6 +5,7 @@ import connectDB from "./config/db.js";
 import { connectRedis } from "./config/redis.js";
 import logger from "./config/logger.js";
 import { setupSocket } from "./sockets/index.js"; 
+import { startLogCleanupCron } from "./services/logCron.service.js";
 
 dotenv.config({
   path: "./.env",
@@ -22,6 +23,7 @@ connectDB()
     const PORT = process.env.PORT || 8000;
     server.listen(PORT, () => {
       logger.info(`⚙️ Server is running at port : ${PORT}`);
+      startLogCleanupCron();
     });
   })
   .catch((err) => {
