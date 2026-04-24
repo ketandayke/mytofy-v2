@@ -33,10 +33,10 @@ Mytofy utilizes a hybrid-database architecture to separate persistent records fr
 - JSON Web Tokens (JWT) & bcrypt
 
 ## 🚀 Deployed Link
-**Live Application:** [Deployed Link Here]
-**Frontend Hosting:** [e.g., Vercel / Netlify]
-**Backend Hosting:** [e.g., Render / Heroku]
-**Databases:** MongoDB Atlas & Redis Cloud / Upstash
+**Live Application:** https://mytofy-v2.vercel.app/
+**Frontend Hosting:**  Vercel
+**Backend Hosting:**  Render
+**Databases:** MongoDB Atlas & Upstash
 
 ## 🛠️ Local Development Setup
 1. Clone the repository.
